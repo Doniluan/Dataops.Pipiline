@@ -1,7 +1,6 @@
 import shutil
 import unittest
 import logging
-import os  # Importando o módulo os
 from pyspark.sql import SparkSession
 from delta import configure_spark_with_delta_pip
 from pyspark.sql.types import StructType, StructField, StringType, DoubleType, IntegerType
@@ -31,9 +30,8 @@ class PySparkTest(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        path = os.path.join("tests", "storage_test")  # Caminho portátil
-        if os.path.exists(path):
-            shutil.rmtree(path)
+        shutil.rmtree(
+            "tests\\storage_test")
         cls.spark.stop()
 
     @staticmethod
@@ -82,7 +80,7 @@ class PySparkTest(unittest.TestCase):
 
     def test_save_delta(self):
         data = PySparkTest.dataframe_mock(self.spark)
-        path = os.path.join("tests", "storage_test")  # Caminho portátil
+        path = "tests\\storage_test"
         save_delta(data, path)
 
     def test_fail_read_csv(self):
