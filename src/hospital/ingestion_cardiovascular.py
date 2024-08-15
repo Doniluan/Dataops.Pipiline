@@ -20,12 +20,12 @@ def read_csv(spark, path=None):
         path = Path("data_sources") / "cardiovascular.csv"
     else:
         path = Path(path)
-    
+
     logging.info("Realizando leitura do arquivo no caminho: %s", path)
-    
+
     if not path.exists():
         raise FileNotFoundError(f"O arquivo não foi encontrado no caminho especificado: {path}")
-    
+
     df = spark.read.format("csv").option("header", "true").load(str(path))
     df.show(truncate=False)  # Imprime o DataFrame na tela
     return df
