@@ -66,12 +66,11 @@ df.write.format("delta").mode("overwrite").option("mergeSchema", True).partition
 
 # COMMAND ------------
 
-%sql
+
 CREATE DATABASE IF NOT EXISTS db_hospital
 
 
 # COMMAND ------------
 
-%sql
-CREATE TABLE IF NOT EXISTS db_hospital.cardiovascular_diseasess LOCATION "gs://databricks-46083817904810/46083817904810/hospital/rw/suus/cardiovascular"
 
+CREATE TABLE IF NOT EXISTS db_hospital.cardiovascular_diseasess LOCATION "gs://databricks-46083817904810/46083817904810/hospital/rw/suus/cardiovascular"
