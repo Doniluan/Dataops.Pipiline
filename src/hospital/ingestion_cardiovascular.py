@@ -15,7 +15,7 @@ def setup_session():
     return configure_spark_with_delta_pip(builder).getOrCreate()
 
 
-def read_csv(spark, path=str(Path("file:///C:/Projeto_DataOps/Dataops.Pipiline/data_sources/cardiovascular.csv"))):
+def read_csv(spark, path=str(Path("data_source/cardiovascular.csv"))):
     logging.info("Realizando leitura do arquivo")
     return spark.read.format("csv").option("header", "true").load(path)
 
@@ -25,7 +25,7 @@ def rename_columns(df):
     return df.withColumnRenamed("height_(cm)", "height_cm").withColumnRenamed("Weight_(kg)", "Weight_kg")
 
 
-def save_delta(df, output_path=Path("Projeto_DataOps/Dataops.Pipiline/storage/hospital/rw/cardiovascular")):
+def save_delta(df, output_path=Path("storage/hospital/rw/cardiovascular/")):
     logging.info("Armazenando dados")
     return df.write.format("delta").mode("overwrite").option("mergeSchema", "true").partitionBy("General_Health").save(str(output_path))
 
