@@ -15,11 +15,10 @@ def setup_session():
     return configure_spark_with_delta_pip(builder).getOrCreate()
 
 
-def read_csv(spark, path = str(Path("C:/Projeto_DataOps/Dataops.Pipiline/data_sources/cardiovascular.csv"))):
+def read_csv(spark, path=str(Path("C:/Projeto_DataOps/Dataops.Pipiline/data_sources/cardiovascular.csv"))):
     logging.info("Realizando leitura do arquivo")
     return spark.read.format("csv").option("header", "true").load(path)
 
-    
 
 def rename_columns(df):
     logging.info("Renomeando colunas")
