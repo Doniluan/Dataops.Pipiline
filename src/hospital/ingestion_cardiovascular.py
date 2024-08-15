@@ -1,6 +1,7 @@
 import logging
 from pyspark.sql import SparkSession
 from delta import configure_spark_with_delta_pip
+from pathlib import Path
 
 
 def setup_session():
@@ -14,10 +15,11 @@ def setup_session():
     return configure_spark_with_delta_pip(builder).getOrCreate()
 
 
-def read_csv(spark, path="C:\\Projeto_DataOps\\Dataops.Pipiline\\data_sources\\cardiovascular.csv"):
+def read_csv(spark, path = str(Path("C:/Projeto_DataOps/Dataops.Pipiline/data_sources/cardiovascular.csv"))):
     logging.info("Realizando leitura do arquivo")
     return spark.read.format("csv").option("header", "true").load(path)
 
+    
 
 def rename_columns(df):
     logging.info("Renomeando colunas")
@@ -26,7 +28,8 @@ def rename_columns(df):
 
 def save_delta(df):
     logging.info("Armazenando dados")
-    return df.write.format("delta").mode("overwrite").option("mergeSchema", "true").partitionBy("General_Health").save("C:\\Projeto_DataOps\\Dataops.Pipiline\\storage\\hospital\\rw\\cardiovascular\\")
+    output_path = Path("Projeto_DataOps/Dataops.Pipiline/storage/hospital/rw/cardiovascular")
+    return df.write.format("delta").mode("overwrite").option("mergeSchema", "true").partitionBy("General_Health").save(str(output_path))
 
 
 def main():

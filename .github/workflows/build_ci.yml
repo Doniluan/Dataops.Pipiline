@@ -28,6 +28,6 @@ jobs:
 
       - name: Run unit tests and generate coverage report
         run: |
-          coverage run -m unittest discover -s tests  # Executa testes e coleta cobertura
+          coverage run -m unittest discover -s tests -p "*.py" # Executa testes e coleta cobertura
           coverage report  # Exibe relatório de cobertura no console
           coverage html  # Gera relatório de cobertura em HTML

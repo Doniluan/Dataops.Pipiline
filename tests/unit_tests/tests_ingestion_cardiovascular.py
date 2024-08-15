@@ -5,6 +5,7 @@ from pyspark.sql import SparkSession
 from delta import configure_spark_with_delta_pip
 from pyspark.sql.types import StructType, StructField, StringType, DoubleType, IntegerType
 from src.hospital.ingestion_cardiovascular import read_csv, rename_columns, save_delta
+from pathlib import Path
 
 
 class PySparkTest(unittest.TestCase):
@@ -30,8 +31,9 @@ class PySparkTest(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        shutil.rmtree(
-            "tests\\storage_test")
+        storage_test_path = Path("tests/storage_test")
+        if storage_test_path.exists() and storage_test_path.is_dir():
+            shutil.rmtree(storage_test_path)
         cls.spark.stop()
 
     @staticmethod
@@ -80,7 +82,7 @@ class PySparkTest(unittest.TestCase):
 
     def test_save_delta(self):
         data = PySparkTest.dataframe_mock(self.spark)
-        path = "tests\\storage_test"
+        path = Path("tests/storage_test")
         save_delta(data, path)
 
     def test_fail_read_csv(self):
@@ -106,6 +108,7 @@ class PySparkTest(unittest.TestCase):
         df = self.spark.createDataFrame(data, schema)
 
         with self.assertRaises(Exception):
+            rename_columns(data)
             save_delta(df)
 
 
