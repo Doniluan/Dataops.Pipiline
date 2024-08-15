@@ -6,9 +6,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-
+    
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -17,17 +19,15 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install flake8 coverage
-          pip install -r requirements.txt
-
+          pip install flake8 coverage  # Instala ferramentas de lint e cobertura
+          pip install -r requirements.txt  # Instala dependências do projeto
 
       - name: Lint with flake8
         run: |
-          flake8 --ignore=E501 src/ tests/ --exclude=src/notebooks
-
+          flake8 src/ tests/ --ignore=E501 --exclude=src/notebooks  # Linting do código
 
       - name: Run unit tests and generate coverage report
         run: |
-          coverage run -m unittest -v
-          coverage report
-          coverage html
+          coverage run -m unittest discover -s tests  # Executa testes e coleta cobertura
+          coverage report  # Exibe relatório de cobertura no console
+          coverage html  # Gera relatório de cobertura em HTML
