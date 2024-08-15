@@ -91,12 +91,17 @@ class PySparkTest(unittest.TestCase):
             read_csv(self.spark, path)
 
     def test_fail_rename_columns(self):
-        data = PySparkTest.dataframe_mock(self.spark)
-        df_invalid = data.withColumn(
-            "Weight_kg", data["Weight_kg"].cast(StringType()))
-
-        with self.assertRaises(Exception):
+        df_invalid = self.spark.createDataFrame([{"invalid_column": "value"}])
+    
+        with self.assertRaises(KeyError):
             rename_columns(df_invalid)
+
+    def test_fail_rename_columns_with_invalid_type(self):
+        data = PySparkTest.dataframe_mock(self.spark)
+        df_invalid = data.withColumn("Weight_kg", data["Weight_kg"].cast(StringType()))
+
+        df_renamed = rename_columns(df_invalid)
+        self.assertTrue(isinstance(df_renamed.schema["Weight_kg"].dataType, StringType))
 
     def test_fail_save_delta(self):
         schema = StructType([
@@ -114,3 +119,4 @@ class PySparkTest(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+ 
