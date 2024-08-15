@@ -92,7 +92,7 @@ class PySparkTest(unittest.TestCase):
 
     def test_fail_rename_columns(self):
         df_invalid = self.spark.createDataFrame([{"invalid_column": "value"}])
-    
+
         with self.assertRaises(KeyError):
             rename_columns(df_invalid)
 
@@ -119,4 +119,3 @@ class PySparkTest(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
- 
