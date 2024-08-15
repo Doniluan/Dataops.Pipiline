@@ -53,7 +53,7 @@ df.printSchema()
 df = df.withColumnRenamed("Height_(cm)", "Height_cm").withColumnRenamed("Weight_(kg)", "Weight_kg")
 
 
-# MAGIC%md 
+# MAGIC %md 
 # MAGIC Realizando o armazenamento de dados
 
 # COMMAND ------------
@@ -66,11 +66,11 @@ df.write.format("delta").mode("overwrite").option("mergeSchema", True).partition
 
 # COMMAND ------------
 
-
-CREATE DATABASE IF NOT EXISTS db_hospital
+# MAGIC %sql
+# MAGIC CREATE DATABASE IF NOT EXISTS db_hospital
 
 
 # COMMAND ------------
 
-
-CREATE TABLE IF NOT EXISTS db_hospital.cardiovascular_diseasess LOCATION "gs://databricks-46083817904810/46083817904810/hospital/rw/suus/cardiovascular"
+# MAGIC %sql
+# MAGIC CREATE TABLE IF NOT EXISTS db_hospital.cardiovascular_diseasess LOCATION "gs://databricks-46083817904810/46083817904810/hospital/rw/suus/cardiovascular"
