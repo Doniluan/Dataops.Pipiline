@@ -29,9 +29,9 @@
 
 # COMMAND ------------
 
-# MAGIC %md 
+# MAGIC %md
 
-# MAGIC Extraindo dados/Realizando a leitura 
+# MAGIC Extraindo dados/Realizando a leitura
 
 # COMMAND ------------
 
@@ -39,7 +39,7 @@
 
 # COMMAND ------------
 
-# df.display() 
+# df.display()
 
 # COMMAND ------------
 
@@ -57,7 +57,7 @@
 
 # df = df.withColumnRenamed("Height_(cm)", "Height_cm").withColumnRenamed("Weight_(kg)", "Weight_kg")
 
-# MAGIC %md 
+# MAGIC %md
 
 # MAGIC Realizando o armazenamento de dados
 
