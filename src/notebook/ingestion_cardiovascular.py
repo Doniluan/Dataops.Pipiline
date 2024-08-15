@@ -5,23 +5,23 @@
 
 # COMMAND ------------
 
-display(dbutils.fs)
+ #display(dbutils.fs)
 
 # COMMAND ------------
 
-display(dbutils.fs.ls("/"))
+ #display(dbutils.fs.ls("/"))
 
 # COMMAND ------------
 
-dbutils.fs.mkdirs("/tmp/")
+ #dbutils.fs.mkdirs("/tmp/")
 
 # COMMAND ------------
 
-display(dbutils.fs.ls("/"))
+#display(dbutils.fs.ls("/"))
 
-# COMMAND ------------
+ # COMMAND ------------
 
-display(dbutils.fs.ls("/tmp/"))
+#display(dbutils.fs.ls("/tmp/"))
 
 # COMMAND ------------
 
@@ -30,19 +30,19 @@ display(dbutils.fs.ls("/tmp/"))
 
 # COMMAND ------------
 
-df = spark.read.format("csv").option("header", True).load("dbfs:/tmp/cardiovascular.csv")
+ #df = spark.read.format("csv").option("header", True).load("dbfs:/tmp/cardiovascular.csv")
 
 # COMMAND ------------
 
-df.display()
+ #df.display() 
 
 # COMMAND ------------
 
-df.select("General_Health").distinct().display()
+ #df.select("General_Health").distinct().display()
 
 # COMMAND ------------
 
-df.printSchema()
+ #df.printSchema()
 
 # MAGIC %md
 # MAGIC # Rename Cols
@@ -50,7 +50,7 @@ df.printSchema()
 # COMMAND ------------
 
 
-df = df.withColumnRenamed("Height_(cm)", "Height_cm").withColumnRenamed("Weight_(kg)", "Weight_kg")
+ #df = df.withColumnRenamed("Height_(cm)", "Height_cm").withColumnRenamed("Weight_(kg)", "Weight_kg")
 
 
 # MAGIC %md 
@@ -58,7 +58,7 @@ df = df.withColumnRenamed("Height_(cm)", "Height_cm").withColumnRenamed("Weight_
 
 # COMMAND ------------
 
-df.write.format("delta").mode("overwrite").option("mergeSchema", True).partitionBy("General_Health").save("/hospital/rw/suus/cardiovascular/")
+ #df.write.format("delta").mode("overwrite").option("mergeSchema", True).partitionBy("General_Health").save("/hospital/rw/suus/cardiovascular/")
 
 
 # MAGIC %md
