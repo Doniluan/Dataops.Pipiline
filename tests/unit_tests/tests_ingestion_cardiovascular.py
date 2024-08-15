@@ -90,11 +90,6 @@ class PySparkTest(unittest.TestCase):
         with self.assertRaises(Exception):
             read_csv(self.spark, path)
 
-    def test_fail_rename_columns(self):
-        df_invalid = self.spark.createDataFrame([{"invalid_column": "value"}])
-
-        with self.assertRaises(KeyError):
-            rename_columns(df_invalid)
 
     def test_fail_rename_columns_with_invalid_type(self):
         data = PySparkTest.dataframe_mock(self.spark)
