@@ -90,7 +90,6 @@ class PySparkTest(unittest.TestCase):
         with self.assertRaises(Exception):
             read_csv(self.spark, path)
 
-
     def test_fail_rename_columns_with_invalid_type(self):
         data = PySparkTest.dataframe_mock(self.spark)
         df_invalid = data.withColumn("Weight_kg", data["Weight_kg"].cast(StringType()))
