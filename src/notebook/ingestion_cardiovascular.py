@@ -104,29 +104,29 @@ df.write.format("delta").mode("overwrite").option("mergeSchema", True).partition
 
 # COMMAND ------------
 
-df_cardio = spark.table("db_hospital.cardiovascular_diseasess")
+df = spark.table("db_hospital.cardiovascular_diseasess")
      
 # COMMAND ------------
 
-df_cardio.count()
+df.count()
 
 # COMMAND ------------
 
-df_cardio.show(10, False)
+df.show(10, False)
 
 # COMMAND ------------     
 
-df_cardio.display()
+df.display()
 
 # COMMAND ------------
 
 # MAGIC %md
 # MAGIC # Verificando classificação de saúde cardiovascular
-# Pesquisa de como as pessoas classificam a sua saúde do coração
+# MAGIC Pesquisa de como as pessoas classificam a sua saúde do coração
 
 # COMMAND ------------
 
-df_cardio.groupby("General_Health", "Sex").count().display()
+df.groupby("General_Health", "Sex").count().display()
 
 # COMMAND ------------
 
@@ -135,7 +135,7 @@ df_cardio.groupby("General_Health", "Sex").count().display()
 
 # COMMAND ------------
 
-df_cardio.groupBy("Checkup", "Age_Category").count().distinct().display()
+df.groupBy("Checkup", "Age_Category").count().distinct().display()
 
 # COMMAND ------------
 
@@ -144,7 +144,7 @@ df_cardio.groupBy("Checkup", "Age_Category").count().distinct().display()
 
 # COMMAND ------------
 
-df_cardio.groupBy("Exercise", "Sex").count().display()
+df.groupBy("Exercise", "Sex").count().display()
 
 # COMMAND ------------
 
@@ -153,8 +153,8 @@ df_cardio.groupBy("Exercise", "Sex").count().display()
 
 # COMMAND ------------
 
-df_cardio.groupBy("Heart_Disease", "Sex").count().display()
+df.groupBy("Heart_Disease", "Sex").count().display()
 
 # COMMAND ------------     
 
-df_cardio.groupBy("Heart_Disease", "Age_Category").count().display()
+df.groupBy("Heart_Disease", "Age_Category").count().display()
