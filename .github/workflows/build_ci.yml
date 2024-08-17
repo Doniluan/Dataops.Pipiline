@@ -24,7 +24,7 @@ jobs:
 
       - name: Lint with flake8
         run: |
-          flake8 src/ tests/ --ignore=E501 --exclude=src/notebooks  # Linting do código
+          flake8 src/ tests/ --ignore=E501 --exclude=src/notebook  # Linting do código
 
       - name: Run unit tests and generate coverage report
         run: |

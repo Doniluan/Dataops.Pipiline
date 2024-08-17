@@ -8,46 +8,45 @@
 
 # COMMAND ------------
 
-# display(dbutils.fs)
+display(dbutils.fs)
 
 # COMMAND ------------
 
-# display(dbutils.fs.ls("/"))
+display(dbutils.fs.ls("/"))
 
 # COMMAND ------------
 
-# dbutils.fs.mkdirs("/tmp/")
+dbutils.fs.mkdirs("/tmp/")
 
-# COMMAND ----------
-# --
+# COMMAND -------------
 
-# display(dbutils.fs.ls("/"))
+display(dbutils.fs.ls("/"))
 
-# COMMAND ------------
+# COMMAND -------------
 
-# display(dbutils.fs.ls("/tmp/"))
+display(dbutils.fs.ls("/tmp/"))
 
-# COMMAND ------------
+# COMMAND -------------
 
-# MAGIC %md
+#MAGIC %md
 
 # MAGIC Extraindo dados/Realizando a leitura
 
 # COMMAND ------------
 
-# df = spark.read.format("csv").option("header", True).load("dbfs:/tmp/cardiovascular.csv")
+df = spark.read.format("csv").option("header", True).load("dbfs:/tmp/cardiovascular.csv")
 
 # COMMAND ------------
 
-# df.display()
+df.display()
 
 # COMMAND ------------
 
-# df.select("General_Health").distinct().display()
+df.select("General_Health").distinct().display()
 
 # COMMAND ------------
 
-# df.printSchema()
+df.printSchema()
 
 # MAGIC %md
 
@@ -55,7 +54,7 @@
 
 # COMMAND ------------
 
-# df = df.withColumnRenamed("Height_(cm)", "Height_cm").withColumnRenamed("Weight_(kg)", "Weight_kg")
+df = df.withColumnRenamed("Height_(cm)", "Height_cm").withColumnRenamed("Weight_(kg)", "Weight_kg")
 
 # MAGIC %md
 
@@ -63,7 +62,7 @@
 
 # COMMAND ------------
 
-# df.write.format("delta").mode("overwrite").option("mergeSchema", True).partitionBy("General_Health").save("/hospital/rw/suus/cardiovascular/")
+df.write.format("delta").mode("overwrite").option("mergeSchema", True).partitionBy("General_Health").save("/hospital/rw/suus/cardiovascular/")
 
 # MAGIC %md
 
@@ -74,7 +73,6 @@
 # MAGIC %sql
 
 # MAGIC CREATE DATABASE IF NOT EXISTS db_hospital
-
 
 # COMMAND ------------
 
