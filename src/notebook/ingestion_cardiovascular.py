@@ -82,6 +82,8 @@ df.write.format("delta").mode("overwrite").option("mergeSchema", True).partition
 # MAGIC %md
 # MAGIC # Verificando detalhes da tabela criada
 
+# COMMAND ------------
+
 # MAGIC %sql
 # MAGIC select * from db_hospital.cardiovascular_diseasess
      
@@ -99,6 +101,8 @@ df.write.format("delta").mode("overwrite").option("mergeSchema", True).partition
 
 # MAGIC %md
 # MAGIC # Analisando dados
+
+# COMMAND ------------
 
 df_cardio = spark.table("db_hospital.cardiovascular_diseases")
      
@@ -129,12 +133,16 @@ df_cardio.groupby("General_Health", "Sex").count().display()
 # MAGIC %md
 # MAGIC # Verificando a quantidade de pessoas que tiveram frequência no hospital
 
+# COMMAND ------------
+
 df_cardio.groupBy("Checkup", "Age_Category").count().distinct().display()
 
 # COMMAND ------------
 
 # MAGIC %md
 # MAGIC # Verificando quem faz atividade fisica
+
+# COMMAND ------------
 
 df_cardio.groupBy("Exercise", "Sex").count().display()
 
