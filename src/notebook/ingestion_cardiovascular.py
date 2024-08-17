@@ -26,7 +26,7 @@ display(dbutils.fs.ls("/tmp/"))
 # COMMAND -------------
 
 # MAGIC %md
-# MAGIC Extraindo dados/Realizando a leitura
+# MAGIC # Extraindo dados/Realizando a leitura
 
 # COMMAND ------------
 
@@ -56,7 +56,7 @@ df = df.withColumnRenamed("Height_(cm)", "Height_cm").withColumnRenamed("Weight_
 # COMMAND ------------
 
 # MAGIC %md
-# MAGIC Realizando o armazenamento de dados
+# MAGIC # Realizando o armazenamento de dados
 
 # COMMAND ------------
 
@@ -65,7 +65,7 @@ df.write.format("delta").mode("overwrite").option("mergeSchema", True).partition
 # COMMAND ------------
 
 # MAGIC %md
-# MAGIC Criando database e tabela pelo delta location
+# MAGIC # Criando database e tabela pelo delta location
 
 # COMMAND ------------
 
@@ -80,7 +80,7 @@ df.write.format("delta").mode("overwrite").option("mergeSchema", True).partition
 # COMMAND ------------
 
 # MAGIC %md
-# MAGIC Verificando detalhes da tabela criada
+# MAGIC # Verificando detalhes da tabela criada
 
 # MAGIC %sql
 # MAGIC select * from db_hospital.cardiovascular_diseasess
@@ -98,7 +98,7 @@ df.write.format("delta").mode("overwrite").option("mergeSchema", True).partition
 # COMMAND ------------
 
 # MAGIC %md
-# MAGIC Analisando dados
+# MAGIC # Analisando dados
 
 df_cardio = spark.table("db_hospital.cardiovascular_diseases")
      
@@ -117,7 +117,7 @@ df_cardio.display()
 # COMMAND ------------
 
 # MAGIC %md
-# MAGIC Verificando classificação de saúde cardiovascular
+# MAGIC # Verificando classificação de saúde cardiovascular
 # Pesquisa de como as pessoas classificam a sua saúde do coração
 
 # COMMAND ------------
@@ -127,20 +127,23 @@ df_cardio.groupby("General_Health", "Sex").count().display()
 # COMMAND ------------
 
 # MAGIC %md
-# MAGIC Verificando a quantidade de pessoas que tiveram frequência no hospital
+# MAGIC # Verificando a quantidade de pessoas que tiveram frequência no hospital
 
 df_cardio.groupBy("Checkup", "Age_Category").count().distinct().display()
 
 # COMMAND ------------
 
-# MAGIC Verificando quem faz atividade fisica
+# MAGIC %md
+# MAGIC # Verificando quem faz atividade fisica
 
 df_cardio.groupBy("Exercise", "Sex").count().display()
 
 # COMMAND ------------
 
 # MAGIC %md
-# MAGIC Verificando quem teve doença cardíaca coronária ou infarto do miocárdio
+# MAGIC # Verificando quem teve doença cardíaca coronária ou infarto do miocárdio
+
+# COMMAND ------------
 
 df_cardio.groupBy("Heart_Disease", "Sex").count().display()
 
