@@ -104,7 +104,7 @@ df.write.format("delta").mode("overwrite").option("mergeSchema", True).partition
 
 # COMMAND ------------
 
-df_cardio = spark.table("db_hospital.cardiovascular_diseases")
+df_cardio = spark.table("db_hospital.cardiovascular_diseasess")
      
 # COMMAND ------------
 
