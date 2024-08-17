@@ -65,17 +65,17 @@ df.write.format("delta").mode("overwrite").option("mergeSchema", True).partition
 # COMMAND ------------
 
 # MAGIC %md
-# MAGIC # Criando database e tabela pelo delta location
+# MAGIC # Criando database e tabela pelo delta location;
 
 # COMMAND ------------
 
 # MAGIC %sql
-# MAGIC CREATE DATABASE IF NOT EXISTS db_hospital
+# MAGIC CREATE DATABASE IF NOT EXISTS db_hospital;
 
 # COMMAND ------------
 
 # MAGIC %sql
-# MAGIC CREATE TABLE IF NOT EXISTS db_hospital.cardiovascular_diseasess LOCATION "gs://databricks-46083817904810/46083817904810/hospital/rw/suus/cardiovascular"
+# MAGIC CREATE TABLE IF NOT EXISTS db_hospital.cardiovascular_diseasess LOCATION "gs://databricks-46083817904810/46083817904810/hospital/rw/suus/cardiovascular";
 
 # COMMAND ------------
 
@@ -85,17 +85,17 @@ df.write.format("delta").mode("overwrite").option("mergeSchema", True).partition
 # COMMAND ------------
 
 # MAGIC %sql
-# MAGIC select * from db_hospital.cardiovascular_diseasess
+# MAGIC select * from db_hospital.cardiovascular_diseasess;
      
 # COMMAND ------------
 
 # MAGIC %sql
-# MAGIC desc detail db_hospital.cardiovascular_diseasess
+# MAGIC desc detail db_hospital.cardiovascular_diseasess;
      
 # COMMAND ------------
 
 # MAGIC %sql
-# MAGIC desc detail delta."gs://databricks-46083817904810/46083817904810/hospital/rw/suus/cardiovascular"
+# MAGIC desc detail delta.`gs://databricks-46083817904810/46083817904810/hospital/rw/suus/cardiovascular`;
 
 # COMMAND ------------
 
