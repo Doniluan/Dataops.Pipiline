@@ -265,15 +265,19 @@ Imagem 12 - Criando Workspace
 
 Neste projeto iremos realizar a conexão entre Github e Databricks, para CI/CD. Primeiro vamos conectar o nosso repositório. Depois de criar o ambiente de trabalho basta clicar no workspace (ou no link) que irá redirecionar para uma página dentro desse ambiente. Agora dentro do espaço de trabalho, iremos conectar um repositório git (por isso que ele foi criado anteriormente) 
 
+<div align="center">
+
  ![criando repositório no db](https://github.com/user-attachments/assets/e4ef1470-046a-4c5f-96b4-3320f919381a)
 
+Imagem 13 – Criando git folder 
+</div>
 
-    Imagem 13 – Criando git folder 
-
+<div align="center">
+	
  ![criando repositório no db2](https://github.com/user-attachments/assets/18252f72-8af7-4ff7-866e-94a17afffc10)
 
-    Imagem 14 – Conectando o repositório git no Databricks 
-
+Imagem 14 – Conectando o repositório git no Databricks 
+</div>
  
 
 Agora que o repositório foi conectado ao Databricks, será preparado o ambiente no Vscode (criação das pastas que irão armazenar o projeto git). Porém, antes disso, devemos realizar a clonagem do repositório git em nossa máquina. Para realizar a clonagem, basta seguir as instruções desse site: 
@@ -291,12 +295,12 @@ https://www.kaggle.com/datasets/alphiree/cardiovascular-diseases-risk-prediction
 Quanto a estrutura, basta seguir o mesmo padrão apresentado pela imagem a seguir 
 
  
-
+<div align="center">
+	
  ![ambiente no vscode](https://github.com/user-attachments/assets/58a25e47-1681-4112-93cf-1508cf704800)
 
-
-    Imagem 15 – Estrutura no Vscode 
-
+ Imagem 15 – Estrutura no Vscode 
+</div>
  
 
 Vale dizer que o arquivo CSV deverá ser colocado dentro do diretório “data_source”. Além disso, também deve ser dito que o arquivo “requirements.txt”, aparecerá após a execução deste comando no terminal:  
@@ -311,127 +315,165 @@ python3 –m venv venv
 ---------------------------------------------------------------------------------------------------------- 
 
 1.4.2. Github Actions 
-
+-------------------------------------------------------------
 Para implementar nossa esteira de integração e entrega contínua, vamos utilizar os workflows do GitHub. Eles garantirão a consistência do código, evitando futuros erros e simplificando a depuração, o que melhora a experiência de todos os usuários que colaboram no repositório.  
 
 O primeiro workflow que vamos implementar, seguindo os princípios de DataOps, é o Lint. Ele é responsável por verificar se a estrutura e a escrita do código estão corretas, prevenindo possíveis erros antes que o código seja integrado e executado. No exemplo abaixo, o Ruff é instalado ou atualizado e, em seguida, é utilizado para realizar o linting em todos os arquivos. Uma coisa deve ser dita, o código a seguir deve ser salvo como um arquivo .yml (por exemplo: build_pylint.yml) dentro do diretório workflows. 
 ```
+name: Pylint
 
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Lint with Ruff
+      run: |
+        pip install ruff
+        ruff --format=github --target-version=py37 .
+      continue-on-error: true
 ```
  
 
-Agora que finalizamos a criação do nosso pipeline, o próximo passo é subir as atualizações do nosso repositório Git. Primeiramente, devemos executar o comando git add ., que irá preparar todas as mudanças realizadas para o commit. Em seguida, é importante rodar o comando git status para verificar quais arquivos foram modificados e estão prontos para serem comitados. Esses comandos serão executados no terminal do Visual Studio Code. Para registrar as mudanças, realizaremos um commit utilizando o comando git commit -m "Recriando pastas e build", o que adiciona uma mensagem descritiva sobre o que foi alterado. Assim, essas informações serão registradas na branch atual. Finalmente, vamos executar o comando git push para enviar todas as atualizações para o repositório remoto, garantindo que as alterações fiquem sincronizadas no GitHub ou outra plataforma de versionamento que esteja sendo utilizada. 
+Agora que finalizamos a criação do nosso pipeline, o próximo passo é subir as atualizações do nosso repositório Git. Primeiramente, devemos executar o comando **git add .**, que irá preparar todas as mudanças realizadas para o commit. Em seguida, é importante rodar o comando **git status** para verificar quais arquivos foram modificados e estão prontos para serem comitados. Esses comandos serão executados no terminal do Visual Studio Code. Para registrar as mudanças, realizaremos um commit utilizando o comando **git commit -m "Recriando pastas e build"**, o que adiciona uma mensagem descritiva sobre o que foi alterado. Assim, essas informações serão registradas na branch atual. Finalmente, vamos executar o comando **git push** para enviar todas as atualizações para o repositório remoto, garantindo que as alterações fiquem sincronizadas no GitHub ou outra plataforma de versionamento que esteja sendo utilizada. 
 
  
 
- 
+<div align="center"> 
 
+ ![build](https://github.com/user-attachments/assets/9e0834b8-1d6f-4fb6-9b67-b643faeabd3a)
  
-
+Imagem 16 – Verificando a build 
+</div>
  
-
- 
-
- 
-
-Imagem 17 – Verificando a build 
-
- 
+------------------------------------------------------------------------
 
 1.4.3. ELT/ETL 
-
+-----------------------------------------------------------------------
 Agora que já subimos a build, realizamos os commits e confirmamos que tudo foi corretamente versionado, o próximo passo é fazer o pull no Databricks. Isso garantirá que tanto o ambiente local quanto o Databricks estejam sincronizados, com ambos possuindo os mesmos arquivos atualizados. 
 
  
-
+<div align="center">
  
+![realizando o pull](https://github.com/user-attachments/assets/89693956-047d-45cf-b028-1d815c04210e)
 
+
+Imagem 17 – Caminho para Pull 
+</div>
  
+<div align="center">
 
- 
+ ![pull](https://github.com/user-attachments/assets/1614a1c5-26c1-4cc1-b9f0-93e9f7eb0eec)
 
-Imagem 18 – Caminho para Pull 
 
- 
+Imagem 18 - Criação de pull request 
 
- 
+</div> 
 
-Imagem 19 - Criação de pull request 
+<div align="center">
 
- 
+![pull realizad](https://github.com/user-attachments/assets/b0782bb7-5e8c-4c31-887b-29f4c60ca74a)
 
-Imagem 20 – Pull realizado 
+Imagem 19 – Pull realizado 
 
- 
+ </div>
 
 Depois da pull ser realizada, criaremos uma compute que servirá como uma infraestrutura de processamento no qual os notebooks, jobs e pipelines serão executados.  
 
+
+<div align="center">
+	
+ ![criando compute](https://github.com/user-attachments/assets/26c1149e-7dd9-4619-834b-0b05353ba4f0)
+
+Imagem 20 - Criando cluster 
+</div>
+
+<div align="center">
+ 
+![configurando compute](https://github.com/user-attachments/assets/4d0048c1-10e8-47a3-ab96-a54985327d82)
+
+Imagem 21 - Configurando cluster 
+</div>
+
  
 
-Imagem 21 - Criando cluster 
+Agora que a compute já está rodando, será criada uma ingestão dentro do notebook. Para isso, basta clicar em criar no canto superior direito, e ir em “Notebook”. Vale ressaltar que isso deve ser feito dentro do notebook que está na pasta **src**.  
 
- 
+<div align="center">
 
-Imagem 22 - Configurando cluster 
- 
+ ![Criando notebook](https://github.com/user-attachments/assets/8cba34ff-8e15-43ec-88bb-2cbdaca0da92)
 
- 
 
-Agora que a compute já está rodando, será criada uma ingestão dentro do notebook. Para isso, basta clicar em criar no canto superior direito, e ir em “Notebook”. Vale ressaltar que isso deve ser feito dentro do notebook que está na pasta src.  
-
- 
-
-Imagem 23 – Criando Notebook 
-
+Imagem 22 – Criando Notebook 
+</div>
  
 
 Agora que o notebook foi criado, antes de começarmos a desenvolver os códigos necessários, precisamos acessar o Google Cloud Storage e fazer o upload do arquivo CSV. No meu projeto, esse arquivo está nomeado como cardiovascular.csv. Esse passo é essencial para garantir que os dados estejam disponíveis para serem utilizados no notebook durante a implementação. Para encontrar, no GCP, as coisas realizadas no notebook, basta seguir o caminho mostrado na imagem. Vale destacar que o uso de pastas temporárias é uma boa prática ao trabalhar com arquivos no ambiente cloud. O motivo é simples e intuitivo: não é recomendável fazer o upload direto dos arquivos para o console do Google Cloud Platform (GCP). Organizar esses arquivos em diretórios temporários permite um controle maior e evita poluir o ambiente principal com arquivos que não precisam ser armazenados de forma permanente. 
 
-Imagem 24 – Caminho até a pasta 
+<div align="center">
 
+![localizando pastas criadas na ingestão](https://github.com/user-attachments/assets/c5331526-3350-4116-a860-679425639c2b)
+
+
+Imagem 23 – Caminho até a pasta 
+</div>
  
+<div align="center">
 
-Imagem 25 – Fazendo o Upload 
+![fazendo upload no GCP](https://github.com/user-attachments/assets/e5252ec1-1a9d-4332-92c4-94b704ecaacf)
 
- 
+
+Imagem 24 – Fazendo o Upload 
+
+</div> 
 
 Após a criação do notebook e o upload dos arquivos no Google Cloud Storage, o próximo passo é configurar o Databricks para acessar esses arquivos. Para isso, será necessário criar uma credencial de armazenamento no Databricks e, em seguida, configurar um local externo que permita ao Databricks acessar os arquivos armazenados na nuvem.  
 
 Para criar a credencial de armazenamento no Databricks, siga os passos abaixo: 
 
-Acesse a aba Catálogo no Databricks. 
+1. Acesse a aba **Catálogo** no Databricks. 
 
-No canto superior direito, clique no ícone de engrenagem. 
+2. No canto superior direito, clique no ícone de **engrenagem**. 
 
-Selecione a opção Credenciais de Armazenamento. 
+3. Selecione a opção **Credenciais de Armazenamento**. 
 
-Na nova tela, clique em Criar Credencial, localizada no canto superior direito. 
+4. Na nova tela, clique em **Criar Credencial**, localizada no canto superior direito. 
 
-Na janela que aparecerá, você deverá preencher o tipo da credencial, o nome e um comentário opcional. 
+5. Na janela que aparecerá, você deverá preencher o tipo da credencial, o nome e um comentário opcional. 
 
-Após preencher as informações necessárias, clique em Criar para finalizar o processo. 
+6. Após preencher as informações necessárias, clique em **Criar** para finalizar o processo. 
 
 Com isso, sua credencial de armazenamento estará configurada e pronta para uso. Com a credencial de armazenamento já criada no Databricks, o próximo passo é configurar as permissões no Google Cloud Platform (GCP) para permitir a conexão entre o Databricks e o Google Cloud. Para isso: 
 
-Acesse o Google Cloud e navegue até Cloud Storage. 
+1. Acesse o Google Cloud e navegue até **Cloud Storage**. 
 
-Dentro do Cloud Storage, selecione a opção Permissões. 
+2. Dentro do Cloud Storage, selecione a opção **Permissões**. 
 
-Clique em Permitir Acesso para abrir a tela de configuração de permissões. 
+3. Clique em **Permitir Acesso** para abrir a tela de configuração de permissões. 
 
-Na nova tela, adicione os participantes inserindo o e-mail associado à credencial de armazenamento criada no Databricks. Esse e-mail pode ser encontrado na tela de criação da credencial, na parte inferior. 
+4. Na nova tela, adicione os participantes inserindo o e-mail associado à credencial de armazenamento criada no Databricks. Esse e-mail pode ser encontrado na tela de criação da credencial, na parte inferior. 
 
-Na seção Atribuir Papéis, selecione as permissões adequadas para que o Databricks possa acessar os arquivos no Cloud Storage (neste ponto, você especificaria as permissões exatas, como 'Leitor de Objetos' ou 'Administrador de Objetos', por exemplo). 
+5. Na seção **Atribuir Papéis**, selecione as permissões adequadas para que o Databricks possa acessar os arquivos no Cloud Storage (neste ponto, você especificaria as permissões exatas, como 'Leitor de Objetos' ou 'Administrador de Objetos', por exemplo). 
 
 Ao configurar corretamente essas permissões, a integração entre o Databricks e o Google Cloud Storage estará pronta para uso. Com a credencial de armazenamento criada e configurada, o próximo passo é criar o local externo no Databricks. Para isso: 
 
-No Databricks, acesse a aba Catálogo. 
+1. No Databricks, acesse a aba **Catálogo**. 
 
-No canto superior direito, clique na engrenagem e selecione Localizações Externas. 
+2. No canto superior direito, clique na **engrenagem** e selecione **Localizações Externas**. 
 
-Uma nova aba será aberta. Clique em Criar Localização. 
+3, Uma nova aba será aberta. Clique em **Criar Localização**. 
 
-Na tela de criação da nova localização externa, você deverá fornecer as seguintes informações: 
+4. Na tela de criação da nova localização externa, você deverá fornecer as seguintes informações: 
 
    - Nome da Localização:  Nome apropriado para a nova localização externa. 
 
@@ -439,18 +481,22 @@ Na tela de criação da nova localização externa, você deverá fornecer as se
 
    - URL: Insira o caminho completo (caminho absoluto) para acessar o local de armazenamento na nuvem. 
 
-Para encontrar a URL correta no Google Cloud Storage: 
+5. Para encontrar a URL correta no Google Cloud Storage, acesse o Google Cloud Storage e selecione o bucket desejado. 
 
-Acesse o Google Cloud Storage e selecione o bucket desejado. 
+6. Navegue pelo explorador de pastas até localizar a pasta e o arquivo específicos (no caso, o arquivo 'cardiovascular'). 
 
-Navegue pelo explorador de pastas até localizar a pasta e o arquivo específicos (no caso, o arquivo 'cardiovascular'). 
-
-A URL completa pode ser obtida ao clicar no arquivo e copiar o caminho absoluto. 
+7. A URL completa pode ser obtida ao clicar no arquivo e copiar o caminho absoluto. 
 
 Com essas informações preenchidas corretamente, o local externo estará configurado no Databricks, permitindo o acesso aos arquivos armazenados na nuvem.  
 
-Imagem 26 – Pegando caminho absoluto 
+<div align="center">
 
+![f](https://github.com/user-attachments/assets/06c8339d-1ac2-4bfc-a5f7-bec71e322c8b)
+
+
+
+Imagem 25 – Pegando caminho absoluto 
+</div>
  
 
 Com todos os pré-requisitos finalmente configurados, podemos iniciar o processo de ETL. No notebook do Databricks, basta executar os comandos descritos na imagem a seguir para começar a ingestão de dados.  
@@ -459,120 +505,143 @@ Com todos os pré-requisitos finalmente configurados, podemos iniciar o processo
 
  
 
- 
+ <div align="center">
 
- 
 
- 
+![ingestão](https://github.com/user-attachments/assets/f81c213c-4817-4a12-a412-3ec1750e5dc7)
 
- 
 
-Imagem 27 - Ingestão ELT 
 
+Imagem 26 - Ingestão ELT 
+</div>
  
 
 É importante destacar que o comando display é específico para o ambiente do Databricks. Caso estivéssemos trabalhando em um ambiente Python local, seria necessário instalar algumas bibliotecas adicionais para obter funcionalidades semelhantes. Nesse caso, você precisaria rodar: 
 
   
-
+```
 pip install databricks 
 
 pip install pyspark 
-
+```
   
 
 No ambiente Python, ao invés do comando display, você utilizaria o método show() ou outra função equivalente para visualizar os dados. Isso garante que você tenha a flexibilidade de executar o processo ETL tanto no Databricks quanto em um ambiente Python tradicional 
 
+
+
+<div align="center">
+
+![extração](https://github.com/user-attachments/assets/5019452b-e96b-416c-b85f-b9a0428aafd7)
+
  
-
-		Imagem 28 - Extração  
-
+Imagem 27 - Extração  
+</div>
  
+<div align="center">
 
-	Imagem 29 – Load e criação do Database 
+![delta location](https://github.com/user-attachments/assets/46da7ef0-f5dc-4883-90d6-1b0173c69c5a)
 
+
+Imagem 28 – Load e criação do Database 
+</div>
  
 
 Algumas ressalvas importantes precisam ser mencionadas: 
 
   
 
-Criação da Pasta Temporária: Essa pasta, responsável por armazenar o arquivo CSV, pode ser criada tanto pelo ambiente em nuvem quanto diretamente através dos comandos no notebook. No meu caso, durante a construção do projeto, optei por criar a pasta diretamente no notebook, pois considerei essa abordagem mais prática. 
+- **Criação da Pasta Temporária**: Essa pasta, responsável por armazenar o arquivo CSV, pode ser criada tanto pelo ambiente em nuvem quanto diretamente através dos comandos no notebook. No meu caso, durante a construção do projeto, optei por criar a pasta diretamente no notebook, pois considerei essa abordagem mais prática. 
 
  
 
-Armazenamento dos Dados (Load): Durante o processo de load dos dados, no momento de salvar, você define o caminho onde os dados serão armazenados. Foi nesse ponto que criei a pasta para armazenar o arquivo cardiovascular. 
+- **Armazenamento dos Dados (Load)**: Durante o processo de load dos dados, no momento de salvar, você define o caminho onde os dados serão armazenados. Foi nesse ponto que criei a pasta para armazenar o arquivo cardiovascular. 
 
  
 
-Especificidade do Caminho no Comando SQL: Ao criar a tabela no Databricks usando um comando SQL, onde o LOCATION exige o caminho absoluto, precisei inserir o caminho completo, incluindo todas as pastas, por estar utilizando um ambiente Windows. Esse detalhe foi necessário no meu caso, embora, em uma aula que assisti, a profissional responsável pelo conteúdo não precisou inserir o caminho completo. Isso demonstra que o comportamento pode variar de acordo com o ambiente de execução. 
+- **Especificidade do Caminho no Comando SQL**: Ao criar a tabela no Databricks usando um comando SQL, onde o LOCATION exige o caminho absoluto, precisei inserir o caminho completo, incluindo todas as pastas, por estar utilizando um ambiente Windows. Esse detalhe foi necessário no meu caso, embora, em uma aula que assisti, a profissional responsável pelo conteúdo não precisou inserir o caminho completo. Isso demonstra que o comportamento pode variar de acordo com o ambiente de execução. 
 
  
 
 Com o notebook já criado, o próximo passo é configurar um job de execução no Databricks. Para isso: 
 
-Na aba Data Engineering, clique em Execução de Jobs. 
+1. Na aba **Data Engineering**, clique em **Execução de Jobs**. 
 
-Em seguida, selecione Criar Job. 
+2. Em seguida, selecione **Criar Job**. 
 
-Preencha os campos necessários conforme as imagens a seguir demonstram. 
+3. Preencha os campos necessários conforme as imagens a seguir demonstram. 
 
 As imagens mostrarão detalhadamente o passo a passo para a criação do job, garantindo que todos os parâmetros sejam configurados corretamente. 
 
-Imagem 30 – Criando Job 
+<div align="center">
 
+![criando job](https://github.com/user-attachments/assets/4afc67b5-60d0-4e3f-981a-fcb1e9ed995f)
+	
  
-
-Imagem 31 – Configurando job 
-
+ Imagem 29 – Criando Job 
+</div>
  
+<div align="center">
+
+![criando jobb](https://github.com/user-attachments/assets/8ead09d0-bb1b-4bd6-9db6-b1a081fa23b9)
+
+
+Imagem 30 – Configurando job 
+</div>
+ 
+-----------------------------------------------------------------------------------------------------------
 
 1.4.4. Chave de Autenticação 
-
+----------------------------------------------------------------------------------------------------------
 Para deixar o projeto mais profissional e seguro, uma boa prática é configurar uma chave SSH. A seguir, está um guia simplificado sobre como criar uma chave SSH pelo terminal do VS Code: 
 
 Antes de criar a chave de autenticação, devemos ativar o serviço ssh.  
 
-Abra o Gerenciador de Serviços: 
+1. Abra o Gerenciador de Serviços: 
 
-Pressione Win + R, digite services.msc e pressione Enter. 
+2. Pressione Win + R, digite services.msc e pressione Enter. 
 
-Encontre o serviço "OpenSSH Authentication Agent": 
+3. Encontre o serviço "OpenSSH Authentication Agent": 
 
-Clique com o botão direito sobre o serviço e selecione Propriedades. 
+4. Clique com o botão direito sobre o serviço e selecione **Propriedades**. 
 
-No campo Tipo de Inicialização, altere para Automático. 
+5. No campo Tipo de Inicialização, altere para **Automático**. 
 
-Em seguida, clique em Iniciar para ativar o serviço. 
+6. Em seguida, clique em **Iniciar** para ativar o serviço. 
 
-Clique em "Aplicar" e "OK". 
+7. Clique em "**Aplicar**" e "**OK**". 
 
-Agora que ele está ativo, podemos digitar os códigos. 
+8. Agora que ele está ativo, podemos digitar os códigos. Digite o seguinte comando no terminal do Vsco:  
 
-Digite o seguinte comando no terminal do Vsco:  
-
+```
 ssh-keygen -t rsa -b 4096 -C "seu_email@example.com" 
- 
+``` 
 
-Esse comando cria uma chave RSA com um tamanho de 4096 bits, que é uma configuração recomendada para garantir a segurança. O terminal solicitará que você escolha um local para salvar a chave. Por padrão, ele sugerirá salvar em ~/.ssh/id_rsa. Agora só aceitar o local padrão ou especificar um caminho diferente. Além disso, também pode-se definir uma senha para a chave SSH. Se preferir não usar uma senha, basta pressionar Enter duas vezes. Para garantir que sua chave SSH seja usada automaticamente ao se conectar a repositórios Git, adicione a chave ao ssh-agent: 
+Esse comando cria uma chave RSA com um tamanho de 4096 bits, que é uma configuração recomendada para garantir a segurança. O terminal solicitará que você escolha um local para salvar a chave. Por padrão, ele sugerirá salvar em **~/.ssh/id_rsa**. Agora só aceitar o local padrão ou especificar um caminho diferente. Além disso, também pode-se definir uma senha para a chave SSH. Se preferir não usar uma senha, basta pressionar Enter duas vezes. Para garantir que sua chave SSH seja usada automaticamente ao se conectar a repositórios Git, adicione a chave ao ssh-agent: 
 
- 
+``` 
 
 eval "$(ssh-agent -s)" 
 
 ssh-add C:\Users\seu_usuario\.ssh\id_rsa 
  
+```
 
 Para copiar o conteúdo da chave, basta digitar o seguinte comando: 
 
  
-
+```
 cat C:\Users\seu_usuario\.ssh\id_rsa.pub 
 
 (Esse comando irá exibir a chave, bastando o adicionar à sua conta no GitHub) 
+```
+<div align="center">
 
-Imagem 32 - Comandos no Powershell 
+![z](https://github.com/user-attachments/assets/784d1bb2-56f6-4813-a0de-d5726d5fb6ac)
 
+
+Imagem 31 - Comandos no Powershell 
+</div>
   
 
 Por fim, basta adicionar a chave ao Github. Para isso, no GitHub, devemos ir em Configurações (Settings) > SSH and GPG keys. Clique em New SSH key. Cole a chave pública no campo "Key" e dê um nome para ela em "Title". Clique em Add SSH key.  
