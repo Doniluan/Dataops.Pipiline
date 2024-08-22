@@ -1,4 +1,4 @@
-<div align="center">
+![realizando o pull](https://github.com/user-attachments/assets/9e6bc152-7aad-4165-b41b-d04424bf2e22)<div align="center">
 
 # DATAOPS PIPELINE
 
@@ -644,24 +644,27 @@ Imagem 31 - Comandos no Powershell
 </div>
   
 
-Por fim, basta adicionar a chave ao Github. Para isso, no GitHub, devemos ir em Configurações (Settings) > SSH and GPG keys. Clique em New SSH key. Cole a chave pública no campo "Key" e dê um nome para ela em "Title". Clique em Add SSH key.  
+Por fim, basta adicionar a chave ao Github. Para isso, no GitHub, devemos ir em **Configurações** (Settings) > **SSH and GPG keys**. Clique em **New SSH key**. Cole a chave pública no campo "Key" e dê um nome para ela em "Title". Clique em **Add SSH key**.  
 
  
 
- 
+ <div align="center">
+
+ ![a](https://github.com/user-attachments/assets/f83f8d57-8837-453c-a1fc-9f7cf8bcbe25)
+
+
+Imagem 32 – Adicionando chave  
+
+ </div>
 
  
+<div align="center">
 
-Imagem 33 – Adicionando chave  
+ ![1](https://github.com/user-attachments/assets/ac0b5eb0-39e4-4aac-b0fc-97ad7eb72e73)
 
- 
 
- 
-
- 
-
-Imagem 44 – Chave criada 
-
+Imagem 33 – Chave criada 
+</div>
  
 
 Essa configuração aumenta significativamente a segurança do projeto ao garantir que apenas dispositivos autorizados possam acessar os repositórios através da chave SSH. 
@@ -670,315 +673,634 @@ Para integrar o Databricks com o GitHub, precisamos gerar um token de acesso pes
 
  
 
-Gerar o Token de Acesso Pessoal (PAT): 
+**Gerando o Token de Acesso Pessoal (PAT)**: 
 
-No GitHub, acesse Configurações (Settings). 
+1. No GitHub, acesse **Configurações** (Settings). 
 
-Em seguida, vá para Configurações de Desenvolvedor (Developer settings). 
+2. Em seguida, vá para **Configurações de Desenvolvedor** (Developer settings). 
 
-Escolha a opção Tokens de acesso pessoal (Personal access tokens) e selecione Generate new token (classic). 
+3. Escolha a opção **Tokens de acesso pessoal** (Personal access tokens) e selecione **Generate new token** (classic). 
 
-Defina as permissões necessárias para o token, como: 
+4. Defina as permissões necessárias para o token, como: 
 
-repo: para controle total sobre os repositórios (criação de branches, commits, etc.). 
+	- repo: para controle total sobre os repositórios (criação de branches, commits, etc.). 
 
-workflow: se for necessário interagir com GitHub Actions. 
+	- workflow: se for necessário interagir com GitHub Actions. 
 
-Adicionar o Token ao Databricks: 
+**Adicionar o Token ao Databricks**: 
 
-No ambiente do Databricks, acesse a seção de Configurações de Integração com Git. 
+1. No ambiente do Databricks, acesse a seção de Configurações de Integração com Git. 
 
-Adicione o token gerado no campo apropriado. Isso permitirá a autenticação para realizar operações como criação de branches, commits e outras interações com o repositório. 
+2. Adicione o token gerado no campo apropriado. Isso permitirá a autenticação para realizar operações como criação de branches, commits e outras interações com o repositório. 
 
-Integração com a Esteira CI/CD: 
+**Integração com a Esteira CI/CD**: 
 
-Após configurar o token, você poderá fazer push de mudanças do Databricks para o repositório GitHub. 
+1. Após configurar o token, você poderá fazer push de mudanças do Databricks para o repositório GitHub. 
 
-Quando um push for realizado, o workflow configurado no GitHub Actions será acionado, executando a build e validando o código de acordo com as regras definidas. 
+2. Quando um push for realizado, o workflow configurado no GitHub Actions será acionado, executando a build e validando o código de acordo com as regras definidas. 
 
-Monitoramento e Visualização: 
+**Monitoramento e Visualização**: 
 
-Após cada push, será possível visualizar o status do build diretamente no GitHub Actions, acompanhando a execução da esteira CI/CD e garantindo a qualidade e integração contínua do projeto. 
+1. Após cada push, será possível visualizar o status do build diretamente no GitHub Actions, acompanhando a execução da esteira CI/CD e garantindo a qualidade e integração contínua do projeto. 
 
- 
+ ------------------------------------------------------------------------
 
 1.4.5. Testes com Pyspark e Data Quality 
+--------------------------------------------------------------------
 
 Após passarmos pelos processos iniciais do DataOps, chegamos a um dos pilares mais importantes: o Data Quality. Esse conceito envolve garantir a qualidade dos dados e implementar testes para assegurar a confiabilidade das informações. 
 
-Na prática, o código desenvolvido no notebook do Databricks foi consolidado em um arquivo .py no VS Code, chamado cardiovascular.py. Esse processo envolve redigitar o código do notebook no arquivo Python, com algumas adaptações necessárias para que ele funcione corretamente no ambiente local. As alterações específicas serão demonstradas nas imagens a seguir. 
+Na prática, o código desenvolvido no notebook do Databricks foi consolidado em um arquivo .py no VS Code, chamado cardiovascular.py. Esse processo envolve redigitar o código do notebook no arquivo Python, com algumas adaptações necessárias para que ele funcione corretamente no ambiente local. As alterações específicas serão demonstradas  a seguir. 
 
-Imagem 45 – redigitando código 
+```
 
- 
+# Databricks notebook source.
+# MAGIC %md
+# MAGIC #Ingestão de Dados ELT
+# MAGIC Conjunto de dados de previsão de risco de doenças cardiovasculares
 
- 
+# COMMAND ------------
 
-Imagem 46 – redigitando código II 
+display(dbutils.fs)
 
- 
+# COMMAND ------------
 
-Imagem 47 – redigitando código III 
+display(dbutils.fs.ls("/"))
+
+# COMMAND ------------
+
+dbutils.fs.mkdirs("/tmp/")
+
+# COMMAND -------------
+
+display(dbutils.fs.ls("/"))
+
+# COMMAND -------------
+
+display(dbutils.fs.ls("/tmp/"))
+
+# COMMAND -------------
+
+# MAGIC %md
+# MAGIC # Extraindo dados/Realizando a leitura
+
+# COMMAND ------------
+
+df = spark.read.format("csv").option("header", True).load("dbfs:/tmp/cardiovascular.csv")
+
+# COMMAND ------------
+
+df.display()
+
+# COMMAND ------------
+
+df.select("General_Health").distinct().display()
+
+# COMMAND ------------
+
+df.printSchema()
+
+# COMMAND ------------
+
+# MAGIC %md
+# MAGIC # Rename Cols
+
+# COMMAND ------------
+
+df = df.withColumnRenamed("Height_(cm)", "Height_cm").withColumnRenamed("Weight_(kg)", "Weight_kg")
+
+# COMMAND ------------
+
+# MAGIC %md
+# MAGIC # Realizando o armazenamento de dados
+
+# COMMAND ------------
+
+df.write.format("delta").mode("overwrite").option("mergeSchema", True).partitionBy("General_Health").save("/hospital/rw/suus/cardiovascular/")
+
+# COMMAND ------------
+
+# MAGIC %md
+# MAGIC # Criando database e tabela pelo delta location;
+
+# COMMAND ------------
+
+# MAGIC %sql
+# MAGIC CREATE DATABASE IF NOT EXISTS db_hospital;
+
+# COMMAND ------------
+
+# MAGIC %sql
+# MAGIC CREATE TABLE IF NOT EXISTS db_hospital.cardiovascular_diseasess LOCATION "gs://databricks-46083817904810/46083817904810/hospital/rw/suus/cardiovascular";
+
+# COMMAND ------------
+
+# MAGIC %md
+# MAGIC # Verificando detalhes da tabela criada
+
+# COMMAND ------------
+
+# MAGIC %sql
+# MAGIC select * from db_hospital.cardiovascular_diseasess;
+     
+# COMMAND ------------
+
+# MAGIC %sql
+# MAGIC desc detail db_hospital.cardiovascular_diseasess;
+     
+# COMMAND ------------
+
+# MAGIC %sql
+# MAGIC desc detail delta.`gs://databricks-46083817904810/46083817904810/hospital/rw/suus/cardiovascular`;
+
+# COMMAND ------------
+
+# MAGIC %md
+# MAGIC # Analisando dados
+
+# COMMAND ------------
+
+df = spark.table("db_hospital.cardiovascular_diseasess")
+     
+# COMMAND ------------
+
+df.count()
+
+# COMMAND ------------
+
+df.show(10, False)
+
+# COMMAND ------------     
+
+df.display()
+
+# COMMAND ------------
+
+# MAGIC %md
+# MAGIC # Verificando classificação de saúde cardiovascular
+# MAGIC Pesquisa de como as pessoas classificam a sua saúde do coração
+
+# COMMAND ------------
+
+df.groupby("General_Health", "Sex").count().display()
+
+# COMMAND ------------
+
+# MAGIC %md
+# MAGIC # Verificando a quantidade de pessoas que tiveram frequência no hospital
+
+# COMMAND ------------
+
+df.groupBy("Checkup", "Age_Category").count().distinct().display()
+
+# COMMAND ------------
+
+# MAGIC %md
+# MAGIC # Verificando quem faz atividade fisica
+
+# COMMAND ------------
+
+df.groupBy("Exercise", "Sex").count().display()
+
+# COMMAND ------------
+
+# MAGIC %md
+# MAGIC # Verificando quem teve doença cardíaca coronária ou infarto do miocárdio
+
+# COMMAND ------------
+
+df.groupBy("Heart_Disease", "Sex").count().display()
+
+# COMMAND ------------     
+
+df.groupBy("Heart_Disease", "Age_Category").count().display()
+
+
+```
 
  
 
 Além disso, para executar o código no ambiente local, é preciso garantir que as bibliotecas necessárias estejam instaladas. Isso inclui rodar os seguintes comandos no terminal: 
 
+```
 pip install delta-spark 
 
 pip install pyspark 
-
+```
  
 
-Ao final desse processo, teremos um código adaptado, que será salvo em uma nova build. A primeira build criada era focada em pylint, mas agora vamos reescrever a build para que ela suporte o processo de CI (Continuous Integration). 
-
+Ao final desse processo, teremos um código adaptado para rodar no notebook do Databricks. Com relação a buid primeira era focada em pylint, mas agora vamos reescrever a build para que ela suporte o processo de CI (Continuous Integration). 
+--------------------------------------------------------------------------
 1.4.5.1. Pipeline de ETL 
-
+------------------------------------------------------------------------
 Pipeline de ETL (Extract, Transform, Load) que realiza a ingestão, transformação e armazenamento de dados usando Spark e Delta Lake.  
 
+```
+import logging
+from pyspark.sql import SparkSession
+from delta import configure_spark_with_delta_pip
+from pathlib import Path
+
+
+def setup_session():
+    builder = SparkSession.builder.appName("Ingestão Cardio") \
+        .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
+        .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
+        .config("spark.hadoop.io.nativeio.enabled", "false") \
+        .config("spark.hadoop.fs.native.enabled", "false") \
+        .config("spark.jars.packages", "io.delta:delta-core_2.12:2.4.0")
+
+    return configure_spark_with_delta_pip(builder).getOrCreate()
+
+
+def read_csv(spark, path=None):
+    if path is None:
+        path = Path("data_sources") / "cardiovascular.csv"
+    else:
+        path = Path(path)
+
+    logging.info("Realizando leitura do arquivo no caminho: %s", path)
+
+    if not path.exists():
+        raise FileNotFoundError(f"O arquivo não foi encontrado no caminho especificado: {path}")
+
+    df = spark.read.format("csv").option("header", "true").load(str(path))
+    df.show(truncate=False)  # Imprime o DataFrame na tela
+    return df
+
+
+def rename_columns(df):
+    logging.info("Renomeando colunas")
+    return df.withColumnRenamed("height_(cm)", "height_cm").withColumnRenamed("Weight_(kg)", "Weight_kg")
+
+
+def save_delta(df, output_path=Path("storage/hospital/rw/cardiovascular/")):
+    logging.info("Armazenando dados")
+    return df.write.format("delta").mode("overwrite").option("mergeSchema", "true").partitionBy("General_Health").save(str(output_path))
+
+
+def main():
+    spark = setup_session()
+    absolute_path = "C:/Projeto_DataOps/Dataops.Pipiline/data_sources/cardiovascular.csv"
+    df = read_csv(spark, absolute_path)
+    df = rename_columns(df)
+    save_delta(df)
+    spark.stop()
+
+
+if __name__ == "__main__":
+    main()  # dessa vez vai
+
+``` 
+
+
+
+**Importações**: 
+
+- logging: Para registrar logs, como mensagens de informação e erros. 
+
+- SparkSession: Classe principal do Spark para criar a sessão de trabalho. 
+
+- Delta: Utilizado para integrar o Delta Lake com o Spark. 
+
+- Path: Facilita o manuseio de caminhos de arquivos. 
+
+- Função setup_session():Configura e retorna uma sessão Spark, habilitada para trabalhar com Delta Lake. 
+
+- Define o nome da aplicação: "Ingestão Cardio". 
+
+- Configura extensões e catálogos para trabalhar com o Delta Lake. 
+
+- Define a dependência do Delta Lake usando o pacote delta-core_2.12:2.4.0. 
+
  
 
-Imagem 48 – Criando Pipeline ETL 
+**Função read_csv(spark, path=None)**: 
+ 
+
+- Lê um arquivo CSV, com um caminho padrão se nenhum for especificado. 
+
+- Verifica se o caminho existe; se não, lança uma exceção. 
+
+- Carrega os dados em um DataFrame Spark e os exibe. 
+
+- Retorna o DataFrame para ser usado nas próximas etapas. 
+
+**Função rename_columns(df)**: 
+
+- Renomeia as colunas do DataFrame para remover caracteres especiais, como parênteses, para padronizar o formato dos nomes. 
+
+- Função save_delta() 
+
+- Salva o DataFrame em formato Delta, particionado pela coluna General_Health, no caminho especificado. 
+
+- Usa o modo overwrite, que substitui os dados existentes. 
+
+- A opção mergeSchema permite adicionar novas colunas caso a estrutura do DataFrame mude. 
 
  
 
-Imagem 49 – Criando Pipeline ETL II 
+**Função main()**: 
 
-Importações: 
+- Esta função é o ponto de entrada principal. 
 
-logging: Para registrar logs, como mensagens de informação e erros. 
+- Cria a sessão Spark. 
 
-SparkSession: Classe principal do Spark para criar a sessão de trabalho. 
+- Lê os dados do arquivo CSV especificado. 
 
-Delta: Utilizado para integrar o Delta Lake com o Spark. 
+- Realiza a transformação de renomear colunas. 
 
-Path: Facilita o manuseio de caminhos de arquivos. 
+- Salva os dados no formato Delta no diretório de saída especificado. 
 
-Função setup_session():Configura e retorna uma sessão Spark, habilitada para trabalhar com Delta Lake. 
+- Finaliza a sessão Spark. 
 
-Define o nome da aplicação: "Ingestão Cardio". 
+**Execução do Script**: 
 
-Configura extensões e catálogos para trabalhar com o Delta Lake. 
+- Garante que o script só será executado se for chamado diretamente. 
 
-Define a dependência do Delta Lake usando o pacote delta-core_2.12:2.4.0. 
-
- 
-
-Função read_csv(spark, path=None): 
- 
-
-Lê um arquivo CSV, com um caminho padrão se nenhum for especificado. 
-
-Verifica se o caminho existe; se não, lança uma exceção. 
-
-Carrega os dados em um DataFrame Spark e os exibe. 
-
-Retorna o DataFrame para ser usado nas próximas etapas. 
-
- Função rename_columns(df): 
-
-Renomeia as colunas do DataFrame para remover caracteres especiais, como parênteses, para padronizar o formato dos nomes. 
-
-Função save_delta() 
-
-Salva o DataFrame em formato Delta, particionado pela coluna General_Health, no caminho especificado. 
-
-Usa o modo overwrite, que substitui os dados existentes. 
-
-A opção mergeSchema permite adicionar novas colunas caso a estrutura do DataFrame mude. 
-
- 
-
-Função main(): 
-
- 
-
-Esta função é o ponto de entrada principal. 
-
-Cria a sessão Spark. 
-
-Lê os dados do arquivo CSV especificado. 
-
-Realiza a transformação de renomear colunas. 
-
-Salva os dados no formato Delta no diretório de saída especificado. 
-
-Finaliza a sessão Spark. 
-
-Execução do Script: 
-
-Garante que o script só será executado se for chamado diretamente. 
-
-De forma geral, esse script faz a leitura de um arquivo CSV contendo dados de saúde cardiovascular, transforma as colunas para padronizar os nomes e armazena os dados no formato Delta, que permite armazenamento eficiente e consultas rápidas. Tudo isso é integrado em uma sessão Spark configurada para trabalhar com Delta Lake. O fluxo de trabalho envolve leitura, transformação e gravação dos dados. 
-
+- De forma geral, esse script faz a leitura de um arquivo CSV contendo dados de saúde cardiovascular, transforma as colunas para padronizar os nomes e armazena os dados no formato Delta, que permite armazenamento eficiente e consultas rápidas. Tudo isso é integrado em uma sessão Spark configurada para trabalhar com Delta Lake. O fluxo de trabalho envolve leitura, transformação e gravação dos dados. 
+--------------------------------------------------------------------------------------------------------------------------------
 1.4.5.2. Testes unitários 
-
+-------------------------------------------------------------------------------------------------------------------------------
 O seguinte código é um conjunto de testes unitários que validam diferentes partes do pipeline de ETL, garantindo que ele funcione corretamente mesmo em cenários de falha. Ele cobre a leitura, transformação e salvamento dos dados, além de tratar possíveis exceções e erros que podem ocorrer durante o processo 
+```
+import shutil
+import unittest
+import logging
+from pyspark.sql import SparkSession
+from delta import configure_spark_with_delta_pip
+from pyspark.sql.types import StructType, StructField, StringType, DoubleType, IntegerType
+from src.hospital.ingestion_cardiovascular import read_csv, rename_columns, save_delta
+from pathlib import Path
 
-Imagem 50 – Criando Teste 
+
+class PySparkTest(unittest.TestCase):
+
+    @classmethod
+    def suppress_py4j_logging(cls):
+        logger = logging.getLogger("py4j")
+        logger.setLevel(logging.WARN)
+
+    @classmethod
+    def create_testing_pyspark_session(cls):
+        builder = SparkSession.builder \
+            .appName("Testes Pyspark") \
+            .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
+            .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog")
+        spark = configure_spark_with_delta_pip(builder).getOrCreate()
+        return spark
+
+    @classmethod
+    def setUpClass(cls):
+        cls.suppress_py4j_logging()
+        cls.spark = cls.create_testing_pyspark_session()
+
+    @classmethod
+    def tearDownClass(cls):
+        storage_test_path = Path("tests/storage_test")
+        if storage_test_path.exists() and storage_test_path.is_dir():
+            shutil.rmtree(storage_test_path)
+        cls.spark.stop()
+
+    @staticmethod
+    def dataframe_mock(spark):
+        schema = StructType([
+            StructField("General_Health", StringType(), True),
+            StructField("Checkup", StringType(), True),
+            StructField("Exercise", StringType(), True),
+            StructField("Heart_Disease", StringType(), True),
+            StructField("Skin_Cancer", StringType(), True),
+            StructField("Other_Cancer", StringType(), True),
+            StructField("Depression", StringType(), True),
+            StructField("Diabetes", StringType(), True),
+            StructField("Arthritis", StringType(), True),
+            StructField("Sex", StringType(), True),
+            StructField("Age_Category", StringType(), True),
+            StructField("Height_cm", DoubleType(), True),
+            StructField("Weight_kg", DoubleType(), True),
+            StructField("BMI", DoubleType(), True),
+            StructField("Smoking_History", StringType(), True),
+            StructField("Alcohol_Consumption", DoubleType(), True),
+            StructField("Fruit_Consumption", DoubleType(), True),
+            StructField("Green_Vegetables_Consumption", DoubleType(), True),
+            StructField("FriedPotato_Consumption", DoubleType(), True)
+        ])
+
+        data = [
+            ("Excellent", "Within the past 2 years", "Yes", "No", "No", "No", "No", "No",
+             "No", "Female", "70-74", 152.0, 52.16, 22.46, "No", 0.0, 30.0, 4.0, 0.0),
+            ("Excellent", "Within the past year", "Yes", "No", "No", "No", "No", "No",
+             "Yes", "Male", "70-74", 191.0, 112.49, 31.0, "No", 0.0, 30.0, 10.0, 15.0)
+        ]
+
+        return spark.createDataFrame(data, schema)
+
+    def test_read_csv(self):
+        df = read_csv(self.spark)
+        self.assertIsNotNone(df)
+        self.assertEqual(df.count(), 308854)
+
+    def test_rename_columns(self):
+        data = PySparkTest.dataframe_mock(self.spark)
+        renamed_df = rename_columns(data)
+        self.assertListEqual(renamed_df.columns, ["General_Health", "Checkup", "Exercise", "Heart_Disease", "Skin_Cancer", "Other_Cancer", "Depression", "Diabetes", "Arthritis", "Sex",
+                             "Age_Category", "Height_cm", "Weight_kg", "BMI", "Smoking_History", "Alcohol_Consumption", "Fruit_Consumption", "Green_Vegetables_Consumption", "FriedPotato_Consumption"])
+
+    def test_save_delta(self):
+        data = PySparkTest.dataframe_mock(self.spark)
+        path = Path("tests/storage_test")
+        save_delta(data, path)
+
+    def test_fail_read_csv(self):
+        path = ""
+        with self.assertRaises(Exception):
+            read_csv(self.spark, path)
+
+    def test_fail_rename_columns_with_invalid_type(self):
+        data = PySparkTest.dataframe_mock(self.spark)
+        df_invalid = data.withColumn("Weight_kg", data["Weight_kg"].cast(StringType()))
+
+        df_renamed = rename_columns(df_invalid)
+        self.assertTrue(isinstance(df_renamed.schema["Weight_kg"].dataType, StringType))
+
+    def test_fail_save_delta(self):
+        schema = StructType([
+            StructField("Name", StringType(), True),
+            StructField("Height", IntegerType(), True),
+            StructField("Weight", DoubleType(), True)
+        ])
+        data = [("Alice", 170, 60.5)]
+        df = self.spark.createDataFrame(data, schema)
+
+        with self.assertRaises(Exception):
+            rename_columns(data)
+            save_delta(df)
+
+
+if __name__ == '__main__':
+    unittest.main()  # suus
+```
+
+**Importações**: 
+
+- shutil: Para manipular diretórios, como remover diretórios de teste. 
+
+- unittest: Framework de testes integrado ao Python. 
+
+- logging: Para controle de logs. 
+
+- SparkSession e configure_spark_with_delta_pip: Para criar a sessão Spark e configurar o Delta Lake. 
+
+- StructType e StructField: Para definir esquemas de DataFrames de teste. 
+
+- read_csv, rename_columns, save_delta: Funções sendo testadas, importadas do módulo onde o pipeline está implementado. 
+
+**Classe PySparkTest(unittest.TestCase)**: 
+
+- Define a classe de testes, herdeira de unittest.TestCase. 
 
  
 
  
 
-Imagem 50 – Criando Teste II 
+**Métodos de Configuração**: 
 
-Imagem 51 – Criando Teste III 
+- Suprime logs desnecessários da biblioteca Py4J, que o PySpark utiliza. 
 
-Importações: 
+- Cria uma sessão Spark configurada para Delta Lake, usada nos testes. 
 
-shutil: Para manipular diretórios, como remover diretórios de teste. 
+- Configura a sessão Spark antes de rodar os testes. 
 
-unittest: Framework de testes integrado ao Python. 
+- Após os testes, remove o diretório de teste, se existir, e encerra a sessão Spark. 
 
-logging: Para controle de logs. 
+**Mock de DataFrame**: 
 
-SparkSession e configure_spark_with_delta_pip: Para criar a sessão Spark e configurar o Delta Lake. 
+- Cria um DataFrame de teste com um esquema específico para simular o comportamento dos dados reais. 
 
-StructType e StructField: Para definir esquemas de DataFrames de teste. 
+**Testes Unitários**: 
 
-read_csv, rename_columns, save_delta: Funções sendo testadas, importadas do módulo onde o pipeline está implementado. 
+- Teste de leitura de CSV: Testa se o arquivo CSV é lido corretamente e valida o número de registros. 
 
-Classe PySparkTest(unittest.TestCase): 
+- Teste de renomeação de colunas: Valida se as colunas foram renomeadas corretamente. 
 
-Define a classe de testes, herdeira de unittest.TestCase. 
+- Teste de salvamento em Delta Lake: Testa se os dados são salvos corretamente no formato Delta. 
 
- 
+**Testes de falha**: 
 
- 
+- Falha ao ler CSV: Testa se o código lida corretamente com a ausência de um caminho válido. 
 
-Métodos de Configuração: 
+- Falha ao renomear colunas com tipo inválido: Testa se o código lida com tipos de dados incorretos. 
 
-Suprime logs desnecessários da biblioteca Py4J, que o PySpark utiliza. 
-
- 
-
-Cria uma sessão Spark configurada para Delta Lake, usada nos testes. 
-
-Configura a sessão Spark antes de rodar os testes. 
-
-Após os testes, remove o diretório de teste, se existir, e encerra a sessão Spark. 
-
-Mock de DataFrame: 
-
-Cria um DataFrame de teste com um esquema específico para simular o comportamento dos dados reais. 
-
-Testes Unitários: 
-
-Teste de leitura de CSV: Testa se o arquivo CSV é lido corretamente e valida o número de registros. 
-
-Teste de renomeação de colunas: Valida se as colunas foram renomeadas corretamente. 
-
-Teste de salvamento em Delta Lake: Testa se os dados são salvos corretamente no formato Delta. 
-
-Testes de falha: 
-
-Falha ao ler CSV: Testa se o código lida corretamente com a ausência de um caminho válido. 
-
-Falha ao renomear colunas com tipo inválido: Testa se o código lida com tipos de dados incorretos. 
-
-Falha ao salvar em Delta Lake: Testa se o código lança exceções corretamente ao tentar salvar um DataFrame incompatível. 
+- Falha ao salvar em Delta Lake: Testa se o código lança exceções corretamente ao tentar salvar um DataFrame incompatível. 
 
  
 
-Execução dos Testes: 
+**Execução dos Testes**: 
 
-Executa todos os testes quando o script é rodado diretamente. 
+- Executa todos os testes quando o script é rodado diretamente. 
 
  
-
+----------------------------------------------------------------------------------------
 1.4.6. Visualização de dados  
-
+---------------------------------------------------------------------------------------
 A visualização de dados (ou Data Visualization), consiste na prática de representar os dados em gráficos ou em tabelas, de modo a facilitar o entendimento a respeito do que essas informações conseguem nos passar. A visualização de dados é essencial para o projeto, pois, por meio dela, conseguimos encontrar padrões nos dados, definir tendências e obter insights interessantes.  
 
 Para a finalização do projeto, decidi utilizar a criação de dashboards que o próprio databricks oferece, já que sua inferface é intuitiva e de fácil entendimento. A seguir mostrarei alguns gráficos criados e o que suas informações nos passam.  
 
+
+<div align="center">
+ 
+![grafico](https://github.com/user-attachments/assets/c905b2d0-1cc5-43db-9bfb-ca001bedd70e)
+
+Imagem 34 - Dashboard 
+</div>
  
 
-Imagem 52 - Dashboard 
+<div align="center">
 
- 
+ ![g](https://github.com/user-attachments/assets/c74c7331-b782-4ac5-834a-03dc3e124b2b)
 
- 
 
-Imagem 53 – Dashboard II 
+Imagem 35 – Dashboard II 
 
-Imagem 54 – Dashboard III 
+</div>
 
-Imagem 55 – Dashboard IV 
+<div align="center">
 
-Distribuição de Doenças Cardiovasculares e Prática de Exercícios Físicos 
+![la](https://github.com/user-attachments/assets/0403115e-18fd-4f79-94f5-13b8576fe0da)
+
+Imagem 36 – Dashboard III 
+
+</div>
+
+
+<div align="center">
+
+![tabe](https://github.com/user-attachments/assets/eb75edaf-3127-4668-a67e-5c12c03cbbdb)
+
+
+Imagem 37 – Dashboard IV 
+</div>
+
+**Distribuição de Doenças Cardiovasculares e Prática de Exercícios Físicos** 
 
  
 
 O gráfico superior esquerdo mostra a relação entre a presença de doenças cardiovasculares e a prática de exercícios físicos. Nota-se que a maior parte dos indivíduos que não possuem doenças no coração também não praticam exercícios, com um número significativo de pessoas (223.414) que fazem exercícios regularmente e não têm doenças cardíacas. Já entre aqueles que possuem doenças cardíacas, a proporção de pessoas que não praticam exercícios é maior (60.469), comparado àqueles que praticam (15.967). Isso sugere uma correlação potencial entre a prática de exercícios e a saúde cardíaca. 
 
-Prática de Atividades Físicas por Sexo 
+**Prática de Atividades Físicas por Sexo** 
 
 O gráfico inferior esquerdo aborda a prática de atividades físicas dividida por sexo. Ambos os sexos têm uma distribuição similar em termos de prática de atividades físicas. Para os que não praticam atividades, há uma ligeira predominância de mulheres (39.858) sobre homens (29.615). Entre aqueles que praticam atividades físicas, os números são quase equivalentes entre os sexos, com mulheres (120.338) e homens (119.043) participando quase na mesma proporção. 
 
  
 
-Saúde Geral e Prática de Exercícios 
+**Saúde Geral e Prática de Exercícios** 
 
 A saúde geral dos indivíduos é apresentada no gráfico inferior direito e o gráfico superior direito. Há uma clara tendência de que pessoas que avaliam sua saúde como "Very Good" ou "Good" tendem a praticar exercícios físicos, enquanto aqueles que avaliam sua saúde como "Poor" têm uma menor adesão à prática de atividades físicas. Isso destaca a importância do exercício regular para a manutenção de uma boa saúde geral. 
 
-Distribuição de Saúde Geral por Sexo 
+**Distribuição de Saúde Geral por Sexo** 
 
 Os gráficos mostram que tanto homens quanto mulheres se distribuem de maneira similar em relação à avaliação de sua saúde. No entanto, observa-se uma ligeira superioridade de homens em avaliações "Very Good" (52.518 homens contra 57.877 mulheres) e "Good", sugerindo que, de uma forma geral, homens podem estar mais inclinados a considerar sua saúde como melhor. 
 
-Distribuição por Sexo 
+**Distribuição por Sexo** 
 
 O gráfico de pizza mostra a distribuição geral dos sexos, com uma leve predominância feminina (51,87%) em comparação à masculina (48,13%). Isso deve ser levado em consideração na análise, pois pode influenciar os números absolutos apresentados nos gráficos anteriores. 
 
  
 
-Relação entre Saúde Geral e Diabetes 
+**Relação entre Saúde Geral e Diabetes** 
 
 Os dados apresentados mostram que indivíduos que relatam uma saúde geral "Very Good" tendem a não ter diabetes, o que pode indicar uma forte correlação entre a percepção de boa saúde e a ausência de diabetes. Por outro lado, aqueles que classificam sua saúde como "Poor" mostram uma maior incidência de diabetes, destacando uma possível relação negativa entre o controle glicêmico e a saúde percebida. 
 
  
 
-Peso Corporal e Saúde Geral 
+**Peso Corporal e Saúde Geral** 
 
  
 
 Os dados revelam uma variação significativa no peso corporal entre indivíduos com diferentes percepções de saúde. Aqueles que consideram sua saúde como "Very Good" têm pesos que variam amplamente, mas permanecem dentro de uma faixa mais saudável em comparação com aqueles que relatam uma saúde "Poor", onde observamos pesos mais elevados, como 125,65 kg. Esse fato pode indicar que o peso excessivo está associado a uma pior avaliação da saúde geral. 
 
-Consumo de Frutas e Verduras 
+**Consumo de Frutas e Verduras** 
 
 Indivíduos com saúde "Very Good" apresentam um consumo consistente de frutas e verduras, com alguns consumindo até 30 porções de frutas e 60 porções de verduras verdes. Em contrapartida, aqueles com saúde "Poor" têm um consumo drasticamente reduzido desses alimentos, com alguns relatando consumir apenas 2 porções de frutas e 1 porção de verduras verdes. Esses dados sugerem que uma dieta rica em frutas e verduras pode estar fortemente associada a uma melhor saúde geral. 
 
-Implicações Gerais 
+**Implicações Gerais** 
 
 A análise dos dados e gráficos evidencia a importância de uma abordagem integrada para a manutenção de uma boa saúde geral, destacando o papel fundamental de uma dieta equilibrada e da prática regular de exercícios físicos. Os dados indicam que indivíduos que mantêm uma alimentação rica em frutas e verduras, além de controlar o peso, tendem a relatar melhor saúde e apresentam menor incidência de doenças crônicas como diabetes. Além disso, a prática regular de atividades físicas está associada a uma melhor percepção da saúde e a uma menor ocorrência de doenças cardíacas. Observa-se também que essas práticas saudáveis são benéficas para todos os grupos, independentemente do sexo. Assim, intervenções focadas na promoção de hábitos alimentares saudáveis e na atividade física regular são essenciais para a prevenção de doenças crônicas e para a melhoria da qualidade de vida. 
 
- 
 
- 
 
- 
+ ------------------------------------------------------------
 
- 
+**2. ARQUITETURA UTILIZADA COMO BASE DE ESTUDO** 
+--------------------------------------------------------
 
- 
+<div align="center">
+	
+ ![Arquitetura ](https://github.com/user-attachments/assets/79999527-747b-4ec9-90bf-5968dcf05bb1)
 
- 
-
- 
-
- 
-
- 
-
- 
-
- 
-
-2. ARQUITETURA UTILIZADA COMO BASE DE ESTUDO 
-
- 
 
 Imagem 56 – Arquitetura base 
+</div>
 
 Seu funcionamento, explicação a respeito das tecnologias e ferramentas utilizadas foram apresentas no início deste documento.  
