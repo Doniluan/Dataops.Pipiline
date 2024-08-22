@@ -6,6 +6,7 @@
 </div>
 
 Projeto realizado durante ano letivo da Faculdade Impacta Tecnologia
+(Baseado no que foi ensinado na matéria de Ambiente de Dados)
  ---------------------------------------------------------------- 
 **1. PROJETO DATAOPS** 
  ---------------------------------------------------------------- 
