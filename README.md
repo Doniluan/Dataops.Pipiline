@@ -1,4 +1,4 @@
-![realizando o pull](https://github.com/user-attachments/assets/9e6bc152-7aad-4165-b41b-d04424bf2e22)<div align="center">
+<div align="center">
 
 # DATAOPS PIPELINE
 
