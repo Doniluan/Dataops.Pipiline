@@ -1301,7 +1301,7 @@ A análise dos dados e gráficos evidencia a importância de uma abordagem integ
  ![Arquitetura ](https://github.com/user-attachments/assets/79999527-747b-4ec9-90bf-5968dcf05bb1)
 
 
-Imagem 56 – Arquitetura base 
+Imagem 38 – Arquitetura base 
 </div>
 
 Seu funcionamento, explicação a respeito das tecnologias e ferramentas utilizadas foram apresentas no início deste documento.  
