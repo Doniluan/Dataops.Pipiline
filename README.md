@@ -1306,3 +1306,4 @@ Imagem 38 – Arquitetura base
 </div>
 
 Seu funcionamento, explicação a respeito das tecnologias e ferramentas utilizadas foram apresentas no início deste documento.  
+Vale ressaltar que, para a criação desse projeto, utilizei do repositório da professora que aplicou essa matéria, já que ele serviu de inspiração para todo o processo 
