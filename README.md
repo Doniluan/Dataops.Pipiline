@@ -891,6 +891,7 @@ pip install pyspark
  
 
 Ao final desse processo, teremos um código adaptado para rodar no notebook do Databricks. Com relação a buid primeira era focada em pylint, mas agora vamos reescrever a build para que ela suporte o processo de CI (Continuous Integration). 
+
 --------------------------------------------------------------------------
 1.4.5.1. Pipeline de ETL 
 ------------------------------------------------------------------------
